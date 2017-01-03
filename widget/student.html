@@ -1,0 +1,41 @@
+<style>
+    .weak {
+        background: #F44336;
+    }
+
+    .good {
+        background: #4CAF50;
+    }
+
+    .weak,
+    .good {
+        padding: 5px;
+        color: white;
+        margin: 5px;
+        border-radius: 4px;
+    }
+
+    .block-section {
+        display: block;
+        padding: 5px;
+    }
+</style>
+
+<span class="block-section">
+    <strong>Predicted Grade
+    </strong>
+</span>
+<span id="result"></span>
+
+<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+<script>
+    var predictURL = "http://localhost:5000/predict?AvgRatio=0.6922 &PercentageOfOpenedDiscussion=" + student.PercentageOfOpenedDiscussion + "&PercentageOfReplies=" + student.PercentageOfReplies + "&PercentageOfWikiEntries=" + student.PercentageOfWikiEntries +
+        "&PercentageOfAssignCompletion=" + student.PercentageOfAssignCompletion + "&PercentageOfVisitOfStudent=" + student.PercentageOfVisitOfStudent + "&PercentagOfAccessedResource=" + student.PercentagOfAccessedResource;
+    $.getJSON(predictURL, function(data) {
+        $("#result").text(data.predicted === "1" ?
+            "Good" :
+            "Weak").addClass(data.predicted === "1" ?
+            "good" :
+            "weak");
+    });
+</script>

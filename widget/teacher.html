@@ -1,0 +1,124 @@
+<style>
+    .success {
+        display: none;
+        padding: 5px;
+        background: #4CAF50;
+        color: white;
+        margin: 5px;
+        border-radius: 4px;
+    }
+
+    .stats {
+        display: block;
+        padding: 5px;
+        background: #96bff4;
+        color: white;
+        border-radius: 10px;
+    }
+
+    .block-section {
+        display: block;
+        padding: 5px;
+    }
+
+    .train,
+    .download {
+        display: block;
+        margin: 5px;
+    }
+</style>
+
+<span class='block-section'>
+    <strong>Student Results</strong>
+    <button class="download">Download</button>
+</span>
+<span class='block-section'>
+    <strong>Train Model</strong>
+    <button class="train">Train Now</button>
+    <span class="success"> Trained Successfully! </span>
+</span>
+<span class='block-section'>
+    <strong>Model Statistics</strong>
+    <span class="stats"></span>
+</span>
+
+<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+<script>
+    $('.download').on('click', function() {
+        $.ajax({
+            url: "http://localhost:5000/predict-all",
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                JSONToCSVConvertor(data);
+            },
+            data: {
+                students: window.students
+            }
+        });
+    });
+
+    $('.train').on('click', function() {
+        $.ajax({
+            url: "http://localhost:5000/train",
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                $(".success").fadeIn("slow").delay(1000).fadeOut('slow');
+            },
+            data: {
+                students: window.students
+            }
+        });
+    });
+
+    var statsURL = "http://localhost:5000/model-stats";
+    $.getJSON(statsURL, function(data) {
+        $(".stats").html(data.join('<br/>'));
+    });
+
+    var JSONToCSVConvertor = function(JSONData) {
+        var arrData = typeof JSONData != 'object' ?
+            JSON.parse(JSONData) :
+            JSONData;
+        var CSV = '';
+        var row = "";
+        for (var index in arrData[0]) {
+            //Now convert each value to string and comma-seprated
+            row += index + ',';
+        }
+        row = row.slice(0, -1);
+        CSV += row + '\r\n';
+        for (var i = 0; i < arrData.length; i++) {
+            var row = "";
+            for (var index in arrData[i]) {
+                row += '"' + arrData[i][index] + '",';
+            }
+            row.slice(0, row.length - 1);
+            CSV += row + '\r\n';
+        }
+
+        if (CSV == '') {
+            alert("Invalid data");
+            return;
+        }
+
+        var link = document.createElement("a");
+        link.id = "lnkDwnldLnk";
+        document.body.appendChild(link);
+
+        var csv = CSV;
+        blob = new Blob([csv], {
+            type: 'text/csv'
+        });
+        var csvUrl = window.webkitURL.createObjectURL(blob);
+        var filename = 'test-results.csv';
+        $("#lnkDwnldLnk").attr({
+            'download': filename,
+            'href': csvUrl
+        });
+
+        $('#lnkDwnldLnk')[0].click();
+        document.body.removeChild(link);
+    };
+</script>

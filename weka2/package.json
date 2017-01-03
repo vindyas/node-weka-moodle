@@ -1,0 +1,21 @@
+{
+  "name": "weka-predict",
+  "version": "1.0.0",
+  "description": "Weka ARFF prediction web service",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.13.4",
+    "async": "*",
+    "node-arff": "*",
+    "underscore": "*",
+    "underscore.string": "*"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Vindya Shyamani",
+  "license": "ISC"
+}

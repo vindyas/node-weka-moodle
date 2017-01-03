@@ -1,0 +1,12 @@
+@relation StudentData3
+
+@attribute PercentageOfOpenedDiscussion numeric
+@attribute PercentageOfReplies numeric
+@attribute PercentageOfWikiEntries numeric
+@attribute PercentageOfAssignCompletion numeric
+@attribute PercentageOfVisitOfStudent numeric
+@attribute PercentagOfAccessedResource numeric
+@attribute cluster {0,1}
+
+@data
+33.333333333333,100,100,50,11.695906432749,100,1
